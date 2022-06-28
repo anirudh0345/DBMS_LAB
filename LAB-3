@@ -1,0 +1,63 @@
+create database supplier_db;
+use supplier_db;
+create table SUPPLIERS(sid int,sname varchar(20),address varchar(30), PRIMARY KEY(sid));
+create table PARTS(pid int,pname varchar(20),color varchar(20), PRIMARY KEY(pid));
+create table CATALOG(sid int,pid int,cost real, PRIMARY KEY(sid,pid),FOREIGN KEY(sid) REFERENCES SUPPLIERS(sid),FOREIGN KEY(pid) REFERENCES PARTS(pid));
+desc SUPPLIERS;
+desc PARTS;
+desc CATALOG;
+insert into SUPPLIERS(sid ,sname,address) 
+			values (10,"Finolex","Hebbal"),
+				   (11,"Ambronex","Majestic"),
+				   (12,"Lancer","Majestic"),
+                   (13,"Finolex","Basavanagudi"),
+                   (14,"Lumex","Jayanagar");
+                   
+insert into PARTS(pid ,pname,color) 
+			values (130,"Spanner","Yellow"),
+				   (131,"Hammer","Red"),
+				   (132,"Wrench","Blue"),
+                   (133,"Spanner","Green"),
+                   (134,"Wrench","Blue");
+                   
+insert into CATALOG(sid ,pid,cost) 
+			values (10,130,5000),
+				   (11,131,4030),
+				   (12,132,2000),
+                   (13,133,2500),
+                   (14,134,3200);
+                   
+commit;
+
+truncate table CATALOG;
+
+insert into CATALOG(sid ,pid,cost) 
+			values (10,130,5000),
+				   (11,131,4030),
+				   (12,132,2000),
+                   (13,133,2500),
+                   (14,134,3200);
+                   commit;
+                   
+insert into CATALOG(sid ,pid,cost) 
+			values (10,131,6000),
+				   (10,132,3030),
+				   (10,133,2800),
+                   (10,134,1200),
+                   (11,130,4000),
+				   (12,133,3030),
+				   (12,134,2800),
+                   (13,130,1200),
+                   (13,131,3200),
+				   (13,132,3200),
+                   (14,130,5001);
+                   commit;
+
+select DISTINCT P.pname FROM PARTS P,CATALOG C WHERE P.pid = C.pid;
+commit;
+SELECT S.sname FROM SUPPLIERS S
+WHERE NOT EXISTS ((SELECT
+P.pid FROM PARTS P)
+	MINUS(SELECT C.pid
+    FROM CATALOG C
+    WHERE C.SID = S.sid));
