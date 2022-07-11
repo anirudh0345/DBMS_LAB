@@ -19,7 +19,7 @@ CREATE TABLE class(
         meets_at TIMESTAMP,
         room VARCHAR(10),
         fid INT,
-        PRIMARY KEY(cname),
+        PRIMARY KEY(cname,fid),
         FOREIGN KEY(fid) REFERENCES faculty(fid));
         
 CREATE TABLE enrolled(
@@ -32,29 +32,46 @@ CREATE TABLE enrolled(
 desc student;
 desc faculty;
 desc class;
-desc from enrolled;
+desc  enrolled;
 
-insert into student(1,'Anirudh','CS',19,'Jr');
-insert into student(2,'Rahul','ME',19,'Jr');
-insert into student(3,'Lokesh','AE',22,'Sr');
-insert into student(4,'Amarnath','IS',18,'Jr');
-insert into student(5,'Aditya','CV',23,'Sr');
-
-
-insert into faculty(10,'Ramesh',2002);
-insert into faculty(22,'Suresh',1551);
-insert into faculty(23,'Rohit',2883);
-insert into faculty(24,'Cyril',6947);
-insert into faculty(25,'Mohan',1212);
+insert into student values (1,'Anirudh','CS','Jr',19);
+insert into student values(2,'Rahul','ME','Jr',19);
+insert into student values(3,'Lokesh','AE','Sr',22);
+insert into student values(4,'Amarnath','IS','Jr',18);
+insert into student values(5,'Aditya','CV','Sr',23);
+insert into student values(6,'Arun','CV','Sr',23);
 
 
-insert into class values('Biology', '05/12/17 08:30:15', 'R128', 10);
-insert into class values('Physics', '06/12/17 08:30:15', 'R2', 10);
-insert into class values(Chemistry', '06/12/17 08:30:15', 'R3', 22);
-insert into class values('Maths', '07/12/17 08:30:15', 'R4', 23);
-insert into class values('Economics', '07/12/17 08:30:15', 'R5', 24);
-insert into class values('Electronics', '08/12/17 08:30:15', 'R6', 25);
-insert into class values('Human Values', '09/12/17 08:30:15', 'R7', 25);
+insert into faculty values(10,'Ramesh',2002);
+insert into faculty values(22,'Suresh',1551);
+insert into faculty values(23,'Rohit',2883);
+insert into faculty values(24,'Cyril',6947);
+insert into faculty values(25,'Mohan',1212);
+
+
+insert into class values('Biology', '05-12-17 08:30:15', 'R128', 10);
+insert into class values('Sociology', '05-12-17 08:30:15', 'R12', 24);
+insert into class values('Physics', '06-12-17 08:30:15', 'R2', 10);
+insert into class values('Chemistry', '06-12-17 08:30:15', 'R3', 22);
+insert into class values('Maths', '07-12-17 08:30:15', 'R4', 23);
+insert into class values('Economics', '07-12-17 08:30:15', 'R5', 24);
+insert into class values('Electronics', '08-12-17 08:30:15', 'R6', 25);
+insert into class values('Human Values', '09-12-17 08:30:15', 'R7', 25);
+
+insert into class values('Sociology', '05-11-17 08:30:15', 'R12', 10);
+insert into class values('Chemistry', '06-11-17 08:30:15', 'R3', 10);
+insert into class values('Maths', '07-11-17 08:30:15', 'R4', 10);
+insert into class values('Economics', '07-11-17 08:30:15', 'R5', 10);
+insert into class values('Electronics', '08-11-17 08:30:15', 'R6', 10);
+insert into class values('Human Values', '09-11-17 08:30:15', 'R7', 10);
+
+insert into class values('Biology', '05-12-17 08:30:15', 'R128', 10);
+insert into class values('Physics', '06-12-17 08:30:15', 'R2', 10);
+insert into class values('Chemistry', '06-12-17 08:30:15', 'R3',24);
+insert into class values('Maths', '07-12-17 08:30:15', 'R4', 24);
+insert into class values('Electronics', '08-12-17 08:30:15', 'R6', 24);
+insert into class values('Human Values', '09-12-17 08:30:15', 'R7', 24);
+
 
 
 insert into enrolled values(1, 'Biology');
@@ -65,6 +82,8 @@ insert into enrolled values(2, 'Human Values');
 insert into enrolled values(3, 'Economics');
 insert into enrolled values(4, 'Electronics');
 insert into enrolled values(5, 'Maths');
+insert into enrolled values(5, 'Biology');
+insert into enrolled values(5, 'Sociology');
 
 select * from student;
 select * from faculty;
@@ -72,12 +91,12 @@ select * from class;
 select * from enrolled;
 
 
-SELECT DISTINCT S.sname //1
+SELECT DISTINCT S.sname 
 FROM student S, class C, enrolled E, faculty F
 WHERE S.snum = E.snum AND E.cname = C.cname AND C.fid = F.fid AND
 F.fname = 'Suresh' AND S.lvl = 'Jr';
 
-SELECT C.cname //2
+SELECT C.cname 
 FROM class C
 WHERE C.room = 'R128'
 OR C.cname IN (SELECT E.cname
@@ -85,7 +104,7 @@ OR C.cname IN (SELECT E.cname
 		GROUP BY E.cname
 		HAVING COUNT(*) >= 5);
         
-SELECT DISTINCT S.sname //3
+SELECT DISTINCT S.sname 
 FROM student S
 WHERE S.snum IN (SELECT E1.snum
 			FROM enrolled E1, Enrolled E2, Class C1, Class C2
@@ -93,18 +112,10 @@ WHERE S.snum IN (SELECT E1.snum
 			AND E1.cname = C1.cname
 			AND E2.cname = C2.cname AND C1.meets_at = C2.meets_at);
 			
-SELECT DISTINCT S.sname //4
-FROM student S, class C, enrolled E, faculty F
-WHERE S.snum = E.snum AND E.cname = C.cname AND C.fid = F.fid AND
-F.fname = 'Suresh' AND S.lvl = 'Jr';
 
-SELECT DISTINCT S.sname //5
-FROM student S, class C, enrolled E, faculty F
-WHERE S.snum = E.snum AND E.cname = C.cname AND C.fid = F.fid AND
-F.fname = 'Suresh' AND S.lvl = 'Jr';
 
 			
-SELECT DISTINCT S.sname //6
+SELECT DISTINCT S.sname 
 FROM student S
 WHERE S.snum NOT IN(SELECT E.snum
 FROM enrolled E);
