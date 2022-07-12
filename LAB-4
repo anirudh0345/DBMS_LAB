@@ -65,8 +65,8 @@ insert into class values('Economics', '07-11-17 08:30:15', 'R5', 10);
 insert into class values('Electronics', '08-11-17 08:30:15', 'R6', 10);
 insert into class values('Human Values', '09-11-17 08:30:15', 'R7', 10);
 
-insert into class values('Biology', '05-12-17 08:30:15', 'R128', 10);
-insert into class values('Physics', '06-12-17 08:30:15', 'R2', 10);
+insert into class values('Biology', '05-12-17 08:30:15', 'R128', 24);
+insert into class values('Physics', '06-12-17 08:30:15', 'R2', 24);
 insert into class values('Chemistry', '06-12-17 08:30:15', 'R3',24);
 insert into class values('Maths', '07-12-17 08:30:15', 'R4', 24);
 insert into class values('Electronics', '08-12-17 08:30:15', 'R6', 24);
@@ -90,13 +90,12 @@ select * from faculty;
 select * from class;
 select * from enrolled;
 
-
 SELECT DISTINCT S.sname 
 FROM student S, class C, enrolled E, faculty F
 WHERE S.snum = E.snum AND E.cname = C.cname AND C.fid = F.fid AND
 F.fname = 'Suresh' AND S.lvl = 'Jr';
 
-SELECT C.cname 
+SELECT DISTINCT C.cname 
 FROM class C
 WHERE C.room = 'R128'
 OR C.cname IN (SELECT E.cname
@@ -111,13 +110,43 @@ WHERE S.snum IN (SELECT E1.snum
 			WHERE E1.snum = E2.snum AND E1.cname <> E2.cname
 			AND E1.cname = C1.cname
 			AND E2.cname = C2.cname AND C1.meets_at = C2.meets_at);
-			
+            
+SELECT F.fname
+FROM faculty F WHERE NOT EXISTS(SELECT *
+								FROM class C
+                                NOT IN
+                                (SELECT C1.room
+                                FROM class C1
+                                WHERE C1.fid = F.fid));
+            
+SELECT F.fname
+FROM faculty F WHERE NOT EXISTS(SELECT *
+				FROM class C
+                            where not exists
+                            (SELECT C1.room
+                            FROM class C1
+                            WHERE C1.fid = F.fid));
 
+                    
+SELECT F.fname
+FROM faculty F WHERE 5 > (SELECT COUNT(E.snum)
+			  FROM class C, enrolled E
+                            WHERE C.cname = E.cname
+                            AND C.fid = F.fid);
 
-			
 SELECT DISTINCT S.sname 
 FROM student S
 WHERE S.snum NOT IN(SELECT E.snum
 FROM enrolled E);
-            
+
+SELECT S.age,S.lvl
+FROM student S 
+GROUP BY S.age,S.lvl
+HAVING S.lvl IN (SELECT S1.lvl
+                   FROM student S1
+                   GROUP BY S1.lvl,S1.age
+                   HAVING COUNT(*) >= ALL(SELECT COUNT(*)
+					  FROM student S2
+                                          WHERE S2.age = S1.age
+					  GROUP BY S2.lvl,S2.age));
 
