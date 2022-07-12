@@ -1,0 +1,48 @@
+create database airline_616;
+use airline_616;
+
+create table AIRCRAFT (
+		aid int,
+        aname varchar(20),
+        cruising_range int,
+        primary key(aid)
+);
+
+create table FLIGHTS(
+	flno int,
+    ffrom varchar(20),
+    tto varchar(20),
+    distance int,
+    departs time,
+    arrives time,
+    price int,
+    aid int,
+    primary key(flno,aid),
+    foreign key(aid) references AIRCRAFT(aid)
+);
+
+create table EMPLOYEE (
+		eid int, 
+        ename varchar(20),
+        salary int,
+        primary key(eid)
+);
+
+create table CERTIFIED (
+		eid int,
+        aid int,
+        primary key(eid,aid),
+        foreign key(eid) references EMPLOYEE(eid),
+        foreign key(aid) references AIRCRAFT(aid)
+);
+
+desc AIRCRAFT;
+desc FLIGHTS;
+desc EMPLOYEE;
+desc CERTIFIED;
+
+insert into AIRCRAFT values ("1232","Boeing737",3000);
+insert into AIRCRAFT values ("5533","Indigo101",2500);
+insert into AIRCRAFT values ("9303","Emirates404",3000);
+insert into AIRCRAFT values ("8731","Boeing737",1500);
+insert into AIRCRAFT values ("0391","JetAir412",1500);
