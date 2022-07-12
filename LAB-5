@@ -46,3 +46,10 @@ insert into AIRCRAFT values ("5533","Indigo101",2500);
 insert into AIRCRAFT values ("9303","Emirates404",3000);
 insert into AIRCRAFT values ("8731","Boeing737",1500);
 insert into AIRCRAFT values ("0391","JetAir412",1500);
+
+insert into EMPLOYEE values (1111,"Anirudh",3000000);
+insert into EMPLOYEE values (2222,"Rahul",500000);
+insert into EMPLOYEE values (3333,"Lokesh",10000);
+insert into EMPLOYEE values (4444,"Tarun",50000);
+insert into EMPLOYEE values (5555,"Amarnath",40000);
+insert into EMPLOYEE values (6666,"Aditya",68000);
