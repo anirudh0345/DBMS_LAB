@@ -99,3 +99,10 @@ AND E.salary >( SELECT AVG (E1.salary)
  WHERE E1.eid IN
 ( SELECT DISTINCT C1.eid
  FROM CERTIFIED C1 ) );
+
+SELECT DISTINCT E.ename
+FROM employee E
+WHERE E.salary < (SELECT MIN(F.price)
+		 FROM flights F
+		 WHERE F.ffrom= 'Bengaluru' AND F.tto = 'Frankfurt');
+		 
