@@ -106,3 +106,28 @@ WHERE E.salary < (SELECT MIN(F.price)
 		 FROM flights F
 		 WHERE F.ffrom= 'Bengaluru' AND F.tto = 'Frankfurt');
 		 
+SELECT F.departs
+FROM Flights F
+WHERE F.flno IN ( ( SELECT F0.flno
+ FROM Flights F0
+ WHERE F0.ffrom = ‘Bangalore’ AND F0.tto = ‘Delhi’
+ AND extract(hour from F0.arrives) < 18 )
+ UNION
+( SELECT F0.flno
+ FROM Flights F0, Flights F1
+ WHERE F0.ffrom = ‘Bangalore’ AND F0.tto <> ‘Delhi’
+ AND F0.tto = F1.ffrom AND F1.tto = ‘Delhi’
+ AND F1.departs > F0.arrives
+ AND extract(hour from F1.arrives) < 18)
+ UNION
+( SELECT F0.flno
+ FROM Flights F0, Flights F1, Flights F2
+ WHERE F0.ffrom = ‘Bangalore’
+ AND F0.tto = F1.ffrom
+ AND F1.tto = F2.ffrom
+ AND F2.tto = ‘Delhi’
+ AND F0.tto <> ‘Delhi’
+ AND F1.tto <> ‘Delhi’
+ AND F1.departs > F0.arrives
+ AND F2.departs > F1.arrives
+ AND extract(hour from F2.arrives) < 18));
