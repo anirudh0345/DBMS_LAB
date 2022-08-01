@@ -80,3 +80,13 @@ select * from WAREHOUSE;
 select * from SHIPMENT;
 
 COMMIT;
+
+select c.cname AS CUSTNAME, count(o.order_id) AS no_of_orders, avg(o.ord_amt)AS AVG_ORDER_AMT from CUSTOMER c, ORDER_1 o where c.CUST =o .CUST group by o.CUST;
+
+select s.order_id from SHIPMENT s, WAREHOUSE w where s.warehouse=w.warehouse AND w.city='Bengaluru';
+
+DELETE FROM ORDER_ITEM
+WHERE item=10;
+
+DELETE FROM ITEM
+WHERE item=10;
